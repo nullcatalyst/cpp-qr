@@ -133,11 +133,6 @@ typedef enum {
  */
 #define QRSPEC_VERSION_MAX 40
 
-/**
- * Maximum version (size) of QR-code symbol.
- */
-#define MQRSPEC_VERSION_MAX 4
-
 
 /******************************************************************************
  * Input data (qrinput.c)
@@ -170,18 +165,6 @@ extern QRinput *QRinput_new(void);
  * @throw EINVAL invalid arguments.
  */
 extern QRinput *QRinput_new2(int version, QRecLevel level);
-
-/**
- * Instantiate an input data object. Object's Micro QR Code flag is set.
- * Unlike with full-sized QR Code, version number must be specified (>0).
- * @param version version number (1--4).
- * @param level Error correction level.
- * @return an input object (initialized). On error, NULL is returned and errno
- *         is set to indicate the error.
- * @throw ENOMEM unable to allocate memory for input objects.
- * @throw EINVAL invalid arguments.
- */
-extern QRinput *QRinput_newMQR(int version, QRecLevel level);
 
 /**
  * Append data to an input object.
@@ -432,18 +415,6 @@ extern QRcode *QRcode_encodeString(const char *string, int version, QRecLevel le
 extern QRcode *QRcode_encodeString8bit(const char *string, int version, QRecLevel level);
 
 /**
- * Micro QR Code version of QRcode_encodeString().
- * @warning This function is THREAD UNSAFE when pthread is disabled.
- */
-extern QRcode *QRcode_encodeStringMQR(const char *string, int version, QRecLevel level, QRencodeMode hint, int casesensitive);
-
-/**
- * Micro QR Code version of QRcode_encodeString8bit().
- * @warning This function is THREAD UNSAFE when pthread is disabled.
- */
-extern QRcode *QRcode_encodeString8bitMQR(const char *string, int version, QRecLevel level);
-
-/**
  * Encode byte stream (may include '\0') in 8-bit mode.
  * @warning This function is THREAD UNSAFE when pthread is disabled.
  * @param size size of the input data.
@@ -456,12 +427,6 @@ extern QRcode *QRcode_encodeString8bitMQR(const char *string, int version, QRecL
  * @throw ERANGE input data is too large.
  */
 extern QRcode *QRcode_encodeData(int size, const unsigned char *data, int version, QRecLevel level);
-
-/**
- * Micro QR Code version of QRcode_encodeData().
- * @warning This function is THREAD UNSAFE when pthread is disabled.
- */
-extern QRcode *QRcode_encodeDataMQR(int size, const unsigned char *data, int version, QRecLevel level);
 
 /**
  * Free the instance of QRcode class.
@@ -531,31 +496,6 @@ extern int QRcode_List_size(QRcode_List *qrlist);
  * @param qrlist a head entry of a QRcode_List.
  */
 extern void QRcode_List_free(QRcode_List *qrlist);
-
-
-/******************************************************************************
- * System utilities
- *****************************************************************************/
-
-/**
- * Return a string that identifies the library version.
- * @param major_version major version number
- * @param minor_version minor version number
- * @param micro_version micro version number
- */
-extern void QRcode_APIVersion(int *major_version, int *minor_version, int *micro_version);
-
-/**
- * Return a string that identifies the library version.
- * @return a string identifies the library version. The string is held by the
- * library. Do NOT free it.
- */
-extern char *QRcode_APIVersionString(void);
-
-/**
- * @deprecated
- */
-extern void QRcode_clearCache(void) __attribute__ ((deprecated));
 
 #if defined(__cplusplus)
 }
